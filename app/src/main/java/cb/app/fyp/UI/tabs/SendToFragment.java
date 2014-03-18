@@ -1,24 +1,26 @@
 package cb.app.fyp.UI.tabs;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cb.app.fyp.R;
 import cb.app.fyp.UI.adapters.ArrayAdapterNoCheck;
-import cb.app.fyp.demo.adapters.BasicModel;
+import cb.app.fyp.UI.models.BasicModel;
 
 /**
  * Created by Conor on 25/02/14.
  */
-public class SendToFragment extends ListFragment {
+public class SendToFragment extends Fragment {
 
 	@Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -31,9 +33,18 @@ public class SendToFragment extends ListFragment {
 		LayoutInflater inflator = getActivity().getLayoutInflater();
 		View view = inflator.inflate(R.layout.activity_send_to, null);
 		ArrayAdapter<BasicModel> adapter = new ArrayAdapterNoCheck(getActivity(), getModel());
-		setListAdapter(adapter);
+		listView.setAdapter(adapter);
+		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+				//TODO Replace with pop up request for NFC
+				String item = "Long Press Working";
+				Toast.makeText(getActivity().getBaseContext(), item, 0).show();
+				return true;
+			}
+		});
 
-		return rootView;
+			return rootView;
 	}
 
 	private List<BasicModel> getModel() {

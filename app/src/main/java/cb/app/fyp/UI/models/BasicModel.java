@@ -1,4 +1,4 @@
-package cb.app.fyp.demo.adapters;
+package cb.app.fyp.UI.models;
 
 import android.support.v7.appcompat.R;
 

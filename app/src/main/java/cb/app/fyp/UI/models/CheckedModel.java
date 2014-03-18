@@ -1,4 +1,4 @@
-package cb.app.fyp.demo.adapters;
+package cb.app.fyp.UI.models;
 
 /**
  * Created by Conor on 05/03/14.

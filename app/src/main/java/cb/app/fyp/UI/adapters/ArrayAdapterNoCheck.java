@@ -14,11 +14,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import cb.app.fyp.R;
-import cb.app.fyp.demo.adapters.BasicModel;
+import cb.app.fyp.UI.models.BasicModel;
 
 public class ArrayAdapterNoCheck extends ArrayAdapter<BasicModel> {
 
@@ -45,6 +46,14 @@ public class ArrayAdapterNoCheck extends ArrayAdapter<BasicModel> {
 			final ViewHolder viewHolder = new ViewHolder();
 			viewHolder.image = (ImageView) view.findViewById(R.id.icon);
 			viewHolder.text = (TextView) view.findViewById(R.id.label);
+			viewHolder.text.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View view) {
+					String item = viewHolder.text.getText().toString();
+					Toast.makeText(getContext(), item, 0).show();
+					return true;
+				}
+			});
 			view.setTag(viewHolder);
 
 		} else {

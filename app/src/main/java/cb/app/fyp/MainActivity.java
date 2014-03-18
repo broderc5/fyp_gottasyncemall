@@ -17,13 +17,18 @@
 package cb.app.fyp;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-import cb.app.fyp.R;
 import cb.app.fyp.UI.adapters.AppSectionsPagerAdapter;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -35,36 +40,43 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	 * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 
-	AppSectionsPagerAdapter mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
+	AppSectionsPagerAdapter appSectionsPagerAdapter;
+	ViewPager viewPager;
+
+	//TODO Remove
+	private DrawerLayout drawerLayout;
+	private ListView drawerListView;
+	//private ActionBarDrawerToggle mDrawerToggle;
+
+	/*private CharSequence mDrawerTitle;
+	private CharSequence mTitle;*/
+	private String[] drawerItemTitles;
 
 	/**
-	 * The {@link ViewPager} that will display the three primary sections of the app, one at a
+	 * The {@link android.support.v4.view.ViewPager} that will display the three primary sections of the app, one at a
 	 * time.
 	 */
-	ViewPager mViewPager;
+
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Create the adapter that will return a fragment for each of the three primary sections
-		// of the app.
+		/*Create the adapter that will return a fragment for each of the three primary sections
+		of the app.*/
+		appSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
 
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
-
-		// Specify that the Home/Up button should not be enabled, since there is no hierarchical
-		// parent.
-		//actionBar.setHomeButtonEnabled(false);
 
 		// Specify that we will be displaying tabs in the action bar.
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Set up the ViewPager, attaching the adapter and setting up a listener for when the
 		// user swipes between sections.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mAppSectionsPagerAdapter);
-		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager.setAdapter(appSectionsPagerAdapter);
+		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
 				// When swiping between different app sections, select the corresponding tab.
@@ -74,11 +86,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			}
 		});
 
-		// For each of the sections in the app, add a tab to the action bar.
-		//for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
-		// Create a tab with text corresponding to the page title defined by the adapter.
-		// Also specify this Activity object, which implements the TabListener interface, as the
-		// listener for when this tab is selected.
+		/*Create two tabs for the apps two functions with a specific icon for each*/
 		actionBar.addTab(
 				actionBar.newTab()
 						.setIcon(R.drawable.ic_sync_to_cloud)
@@ -93,6 +101,45 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		actionBar.setDisplayShowHomeEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(false);
 		//}
+
+		//TODO clean up!!
+		//mTitle = mDrawerTitle = getTitle();
+		drawerItemTitles = getResources().getStringArray(R.array.planets_array);
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawerListView = (ListView) findViewById(R.id.left_drawer);
+
+		// set a custom shadow that overlays the main content when the drawer opens
+		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		// set up the drawer's list view with items and click listener
+		drawerListView.setAdapter(new ArrayAdapter<String>(this,
+				R.layout.drawer_list_item, drawerItemTitles));
+		drawerListView.setOnItemClickListener(new DrawerItemClickListener());
+
+		 /*ActionBarDrawerToggle ties together the the proper interactions
+		 between the sliding drawer and the action bar app icon*/
+		/*mDrawerToggle = new ActionBarDrawerToggle(
+				this,                  *//* host Activity *//*
+				drawerLayout,         *//* DrawerLayout object *//*
+				R.drawable.ic_launcher,  *//* nav drawer image to replace 'Up' caret *//*
+				R.string.drawer_open,  *//* "open drawer" description for accessibility *//*
+				R.string.drawer_close  *//* "close drawer" description for accessibility *//*
+		) {
+			public void onDrawerClosed(View view) {
+				getActionBar().setTitle(mTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+
+			public void onDrawerOpened(View drawerView) {
+				getActionBar().setTitle(mDrawerTitle);
+				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+			}
+		};
+		drawerLayout.setDrawerListener(mDrawerToggle);*/
+
+		if (savedInstanceState == null) {
+			selectItem(0);
+		}
+
 	}
 
 	@Override
@@ -102,26 +149,33 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in the ViewPager.
-		mViewPager.setCurrentItem(tab.getPosition());
+		viewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
 	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 	}
 
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
-	 * sections of the app.
-	 */
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			selectItem(position);
+		}
+	}
 
+	private void selectItem(int position) {
+		// update the main content by replacing fragments
+		Fragment fragment = new PlanetFragment();
+		Bundle args = new Bundle();
+		args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+		fragment.setArguments(args);
 
-	/**
-	 * A fragment that launches other parts of the demo application.
-	 */
+		android.app.FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.pager, fragment).commit();
 
-
-	/**
-	 * A dummy fragment representing a section of the app, but that simply displays dummy text.
-	 */
-
+		// update selected item and title, then close the drawer
+		drawerListView.setItemChecked(position, true);
+		setTitle(drawerItemTitles[position]);
+		drawerLayout.closeDrawer(drawerListView);
+	}
 }

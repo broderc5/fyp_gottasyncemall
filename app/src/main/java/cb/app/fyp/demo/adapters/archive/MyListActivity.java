@@ -1,4 +1,4 @@
-package cb.app.fyp.demo.adapters;
+package cb.app.fyp.demo.adapters.archive;
 import android.app.ListActivity;
 import android.os.Bundle;
 

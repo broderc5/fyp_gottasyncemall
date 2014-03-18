@@ -1,4 +1,4 @@
-package cb.app.fyp.demo.adapters;
+package cb.app.fyp.demo.adapters.archive;
 
 /**
  * Created by Conor on 04/03/14.
@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
 import cb.app.fyp.UI.adapters.ArrayAdapterWithCheck;
+import cb.app.fyp.UI.models.CheckedModel;
 
 public class MyList extends ListActivity {
 

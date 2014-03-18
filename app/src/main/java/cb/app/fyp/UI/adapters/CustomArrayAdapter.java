@@ -1,9 +1,9 @@
 package cb.app.fyp.UI.adapters;
 
 /*import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.convertView.LayoutInflater;
+import android.convertView.View;
+import android.convertView.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -128,7 +128,7 @@ public View getView(int position, View convertView, ViewGroup parent) {
 			}
 		});
 
-		//return the view to be displayed
+		//return the convertView to be displayed
 		return convertView;
 	}
 
