@@ -1,8 +1,8 @@
 package cb.app.fyp.UI.adapters;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentPagerAdapter;
 
 import cb.app.fyp.UI.tabs.NullFragment;
 import cb.app.fyp.UI.tabs.SendToFragment;
@@ -17,12 +17,9 @@ public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
 			super(fragmentManager);
 		}
 
-		@Override
-		public Fragment getItem(int i) {
+		@Override public Fragment getItem(int i) {
 			switch (i) {
 				case 0:
-					// The first section of the app is the most interesting -- it offers
-					// a launchpad into the other demonstrations in this example application.
 					return new SyncHomeFragment();
 				case 1:
 					return new SendToFragment();

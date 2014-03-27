@@ -2,7 +2,7 @@ package cb.app.fyp.UI.tabs;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 
 /**
  * Created by Conor on 05/03/14.

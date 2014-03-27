@@ -1,7 +1,7 @@
 package cb.app.fyp.UI.tabs;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +20,12 @@ public class SyncHomeFragment extends ListFragment {
    	Button button;
 	ArrayAdapterWithCheck adapter;
 
-	@Override public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+		View rootView = inflater.inflate(R.layout.activity_sync_home, container, false);
 		adapter = new ArrayAdapterWithCheck(getActivity(), getModel());
 		setListAdapter(adapter);
-	}
-
-	@Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View rootView = inflater.inflate(R.layout.activity_sync_home, container, false);
-
 		button = (Button) rootView.findViewById(R.id.confirm_button);
-
-
 
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -16,22 +16,22 @@
 
 package cb.app.fyp;
 
-import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import cb.app.fyp.UI.adapters.AppSectionsPagerAdapter;
+import cb.app.fyp.UI.tabs.NullFragment;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+public class MainActivity extends Activity {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
@@ -41,16 +41,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	 */
 
 	AppSectionsPagerAdapter appSectionsPagerAdapter;
-	ViewPager viewPager;
 
 	//TODO Remove
 	private DrawerLayout drawerLayout;
 	private ListView drawerListView;
-	//private ActionBarDrawerToggle mDrawerToggle;
 
-	/*private CharSequence mDrawerTitle;
-	private CharSequence mTitle;*/
 	private String[] drawerItemTitles;
+	Fragment [] fragments = new Fragment[10];
 
 	/**
 	 * The {@link android.support.v4.view.ViewPager} that will display the three primary sections of the app, one at a
@@ -62,49 +59,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		/*Create the adapter that will return a fragment for each of the three primary sections
-		of the app.*/
-		appSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
-
-		// Set up the action bar.
-		final ActionBar actionBar = getActionBar();
-
-		// Specify that we will be displaying tabs in the action bar.
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-		// Set up the ViewPager, attaching the adapter and setting up a listener for when the
-		// user swipes between sections.
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		viewPager.setAdapter(appSectionsPagerAdapter);
-		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				// When swiping between different app sections, select the corresponding tab.
-				// We can also use ActionBar.Tab#select() to do this if we have a reference to the
-				// Tab.
-				actionBar.setSelectedNavigationItem(position);
-			}
-		});
-
-		/*Create two tabs for the apps two functions with a specific icon for each*/
-		actionBar.addTab(
-				actionBar.newTab()
-						.setIcon(R.drawable.ic_sync_to_cloud)
-						.setTabListener(this));
-
-		actionBar.addTab(
-				actionBar.newTab()
-						.setIcon(R.drawable.ic_send_to_device)
-						.setTabListener(this));
-
-
-		actionBar.setDisplayShowHomeEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(false);
-		//}
-
 		//TODO clean up!!
 		//mTitle = mDrawerTitle = getTitle();
-		drawerItemTitles = getResources().getStringArray(R.array.planets_array);
+		drawerItemTitles = getResources().getStringArray(R.array.nav_drawer_array);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerListView = (ListView) findViewById(R.id.left_drawer);
 
@@ -136,46 +93,92 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		};
 		drawerLayout.setDrawerListener(mDrawerToggle);*/
 
+		/*if (savedInstanceState == null) {
+			fragments[0] = selectNewItem(2);
+		}*/
+
 		if (savedInstanceState == null) {
 			selectItem(0);
 		}
 
 	}
 
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-	}
+	/*@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+		View rootView = inflater.inflate(R.layout.activity_main, container, false);
+	}*/
 
-	@Override
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-		// When the given tab is selected, switch to the corresponding page in the ViewPager.
-		viewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-	}
 
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			selectItem(position);
 		}
+		/*@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			if(fragments[position] != null) {
+				selectItem(fragments[position], position);
+			}
+			else{
+				fragments[position] = selectNewItem(position);
+			}
+		}*/
 	}
 
-	private void selectItem(int position) {
+	/*private Fragment selectNewItem(int position) {
+		Fragment fragment = new NullFragment();
+		FragmentManager fragmentManager = getFragmentManager();
+
+		switch (position){
+			case 0:
+				fragment = fragmentManager.findFragmentByTag("HomeFragment");
+				break;
+			case 1:
+				fragment = new PlanetFragment();
+				break;
+			case 2:
+				fragment = new HomeFragment();
+				break;
+		}
 		// update the main content by replacing fragments
-		Fragment fragment = new PlanetFragment();
-		Bundle args = new Bundle();
-		args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-		fragment.setArguments(args);
+		if (fragment != null) {
 
-		android.app.FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.pager, fragment).commit();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+			// update selected item and title, then close the drawer
+			//drawerListView.setItemChecked(position, true);
+			//setTitle(drawerItemTitles[position]);
+			drawerLayout.closeDrawer(drawerListView);
+		} else {
+			// error in creating fragment
+			Log.e("MainActivity", "Error in creating fragment");
+		}
+		return fragment;
+	}*/
 
-		// update selected item and title, then close the drawer
-		drawerListView.setItemChecked(position, true);
-		setTitle(drawerItemTitles[position]);
-		drawerLayout.closeDrawer(drawerListView);
+	private void selectItem(int position) {
+		Fragment fragment = new NullFragment();
+		switch (position){
+			case 0:
+				fragment = new HomeFragment();
+				break;
+			case 1:
+				//Placeholder
+				fragment = new PlanetFragment();
+
+		}
+		// update the main content by replacing fragments
+		if (fragment != null) {
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+			// update selected item and title, then close the drawer
+			drawerListView.setItemChecked(position, true);
+			setTitle(drawerItemTitles[position]);
+			drawerLayout.closeDrawer(drawerListView);
+		} else {
+			// error in creating fragment
+			Log.e("MainActivity", "Error in creating fragment");
+		}
 	}
 }
