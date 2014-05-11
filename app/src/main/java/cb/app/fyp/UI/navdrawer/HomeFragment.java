@@ -1,8 +1,7 @@
-package cb.app.fyp;
+package cb.app.fyp.UI.navdrawer;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -39,7 +38,7 @@ public class HomeFragment extends Fragment implements ActionBar.TabListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		rootView = null;
 		/*if(savedInstanceState == null){*/
-		rootView = inflater.inflate(R.layout.activity_home, container, false);
+		rootView = inflater.inflate(R.layout.fragment_home, container, false);
 		appSectionsPagerAdapter = new AppSectionsPagerAdapter(getChildFragmentManager());
 		// Create the adapter that will return a fragment for each of the three primary sections
 		// of the app.
@@ -82,17 +81,8 @@ public class HomeFragment extends Fragment implements ActionBar.TabListener {
 			actionBar.setDisplayShowHomeEnabled(false);
 			actionBar.setDisplayShowTitleEnabled(false);
 
-
-		//}
 		return rootView;
 	}
-
-	/*@Override
-	public void onPause(){
-		super.onPause();
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().add(this, "HomeFragment").commit();
-	}*/
 
 	@Override
 	public void onDestroy() {

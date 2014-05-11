@@ -18,7 +18,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
 	private final ArrayList<String> values;
 
 	public CustomArrayAdapter(Context context, ArrayList<String> values) {
-		super(context, R.layout.activity_sync_home, values);
+		super(context, R.layout.fragment_sync_home, values);
 		this.context = context;
 		this.values = values;
 	}
@@ -27,7 +27,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View rowView = inflater.inflate(R.layout.activity_sync_home, parent, false);
+		View rowView = inflater.inflate(R.layout.fragment_sync_home, parent, false);
 		TextView textView = (TextView) rowView.findViewById(R.id.label);
 		CheckBox checkbox = (CheckBox) rowView.findViewById(R.id.checkbox);
 		textView.setText(values.get(position));
@@ -66,7 +66,7 @@ public class CustomArrayAdapter extends ArrayAdapter<String> {
 public View getView(int position, View convertView, ViewGroup parent) {
 	LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	View rowView = inflater.inflate(R.layout.activity_sync_home, parent, false);
+	View rowView = inflater.inflate(R.layout.fragment_sync_home, parent, false);
 	TextView textView2 = (TextView) rowView.findViewById(R.id.label);
 	CheckBox checkbox = (CheckBox) rowView.findViewById(R.id.checkbox);
 	textView2.setText(values[position]);
@@ -90,7 +90,7 @@ public View getView(int position, View convertView, ViewGroup parent) {
 		{
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView=inflater.inflate(R.layout.activity_sync_home, parent, false);
+			convertView=inflater.inflate(R.layout.fragment_sync_home, parent, false);
 			viewHolder=new ViewHolder();
 
 			//cache the views

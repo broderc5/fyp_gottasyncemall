@@ -19,6 +19,7 @@ package cb.app.fyp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -28,7 +29,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import cb.app.fyp.UI.adapters.AppSectionsPagerAdapter;
+import java.util.ArrayList;
+import java.util.List;
+
+import cb.app.fyp.Drive.DriveActivity;
+import cb.app.fyp.UI.navdrawer.AboutFragment;
+import cb.app.fyp.UI.navdrawer.HomeFragment;
+import cb.app.fyp.UI.navdrawer.PlanetFragment;
 import cb.app.fyp.UI.tabs.NullFragment;
 
 public class MainActivity extends Activity {
@@ -40,14 +47,14 @@ public class MainActivity extends Activity {
 	 * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 
-	AppSectionsPagerAdapter appSectionsPagerAdapter;
-
 	//TODO Remove
 	private DrawerLayout drawerLayout;
 	private ListView drawerListView;
+	private final String DATA = "data";
 
 	private String[] drawerItemTitles;
 	Fragment [] fragments = new Fragment[10];
+	byte[] file;
 
 	/**
 	 * The {@link android.support.v4.view.ViewPager} that will display the three primary sections of the app, one at a
@@ -72,42 +79,19 @@ public class MainActivity extends Activity {
 				R.layout.drawer_list_item, drawerItemTitles));
 		drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
-		 /*ActionBarDrawerToggle ties together the the proper interactions
-		 between the sliding drawer and the action bar app icon*/
-		/*mDrawerToggle = new ActionBarDrawerToggle(
-				this,                  *//* host Activity *//*
-				drawerLayout,         *//* DrawerLayout object *//*
-				R.drawable.ic_launcher,  *//* nav drawer image to replace 'Up' caret *//*
-				R.string.drawer_open,  *//* "open drawer" description for accessibility *//*
-				R.string.drawer_close  *//* "close drawer" description for accessibility *//*
-		) {
-			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-			}
-
-			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(mDrawerTitle);
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-			}
-		};
-		drawerLayout.setDrawerListener(mDrawerToggle);*/
-
-		/*if (savedInstanceState == null) {
-			fragments[0] = selectNewItem(2);
-		}*/
-
 		if (savedInstanceState == null) {
 			selectItem(0);
 		}
-
 	}
 
-	/*@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View rootView = inflater.inflate(R.layout.activity_main, container, false);
-	}*/
-
+	public void setResult(List<byte[]> bytes){
+		Intent intent = new Intent(this, DriveActivity.class);
+		for (int i = 0; i < bytes.size(); i++) {
+			intent.putExtra(DATA+i, bytes.get(i));
+		}
+		setResult(Activity.RESULT_OK, intent);
+		finish();
+	}
 
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 
@@ -115,46 +99,7 @@ public class MainActivity extends Activity {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			selectItem(position);
 		}
-		/*@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			if(fragments[position] != null) {
-				selectItem(fragments[position], position);
-			}
-			else{
-				fragments[position] = selectNewItem(position);
-			}
-		}*/
 	}
-
-	/*private Fragment selectNewItem(int position) {
-		Fragment fragment = new NullFragment();
-		FragmentManager fragmentManager = getFragmentManager();
-
-		switch (position){
-			case 0:
-				fragment = fragmentManager.findFragmentByTag("HomeFragment");
-				break;
-			case 1:
-				fragment = new PlanetFragment();
-				break;
-			case 2:
-				fragment = new HomeFragment();
-				break;
-		}
-		// update the main content by replacing fragments
-		if (fragment != null) {
-
-			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-			// update selected item and title, then close the drawer
-			//drawerListView.setItemChecked(position, true);
-			//setTitle(drawerItemTitles[position]);
-			drawerLayout.closeDrawer(drawerListView);
-		} else {
-			// error in creating fragment
-			Log.e("MainActivity", "Error in creating fragment");
-		}
-		return fragment;
-	}*/
 
 	private void selectItem(int position) {
 		Fragment fragment = new NullFragment();
@@ -165,6 +110,9 @@ public class MainActivity extends Activity {
 			case 1:
 				//Placeholder
 				fragment = new PlanetFragment();
+				break;
+			case 2:
+				fragment = new AboutFragment();
 
 		}
 		// update the main content by replacing fragments
