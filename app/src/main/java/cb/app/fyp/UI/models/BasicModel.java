@@ -1,6 +1,6 @@
 package cb.app.fyp.UI.models;
 
-import android.support.v7.appcompat.R;
+import android.graphics.drawable.Drawable;
 
 /**
  * Created by Conor on 04/03/14.
@@ -8,10 +8,11 @@ import android.support.v7.appcompat.R;
 public class BasicModel {
 
 	private String name;
-	private int icon;
+	private Drawable icon;
 
-	public BasicModel(String name){
+	public BasicModel(String name, Drawable icon){
 		this.name = name;
+		this.icon = icon;
 	}
 
 	public String getName() {
@@ -22,11 +23,11 @@ public class BasicModel {
 		this.name = name;
 	}
 
-	public int getIcon() {
+	public Drawable getIcon() {
 		return icon;
 	}
 
-	public void setIcon(int icon) {
+	public void setIcon(Drawable icon) {
 		this.icon = icon;
 	}
 

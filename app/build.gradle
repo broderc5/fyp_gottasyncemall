@@ -12,22 +12,29 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            runProguard true
+            proguardFile getDefaultProguardFile('proguard-android.txt')
         }
+    }
+
+    productFlavors {
+        flavor1 {
+        }
+        flavor2 {
+            proguardFile 'some-other-rules.txt'
+        }
+
     }
 }
 
 dependencies {
     compile 'com.android.support:appcompat-v7:+'
-    compile 'com.google.android.gms:play-services:4.2.42'
+    compile 'com.google.android.gms:play-services:4.3.23'
+    compile 'com.android.support:support-v13:+'
+    compile 'com.android.support:support-v4:+'
+    compile 'com.google.apis:google-api-services-drive:v2-rev113-1.17.0-rc'
 }
 
 repositories {
     mavenCentral()
-}
-
-dependencies {
-    compile 'com.android.support:support-v13:+'
-    compile 'com.google.apis:google-api-services-drive:v2-rev113-1.17.0-rc'
 }

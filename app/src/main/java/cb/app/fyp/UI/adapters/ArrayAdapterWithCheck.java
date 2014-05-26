@@ -15,7 +15,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -69,6 +68,7 @@ public class ArrayAdapterWithCheck extends ArrayAdapter<CheckedModel> {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
+		viewHolder.image.setImageDrawable(list.get(position).getIcon());
 		viewHolder.text.setText(list.get(position).getName());
 		viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 

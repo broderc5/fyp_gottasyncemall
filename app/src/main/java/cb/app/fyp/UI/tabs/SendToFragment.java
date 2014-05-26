@@ -1,6 +1,7 @@
 package cb.app.fyp.UI.tabs;
 
 import android.app.ListFragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cb.app.fyp.R;
 import cb.app.fyp.UI.adapters.ArrayAdapterNoCheck;
 import cb.app.fyp.UI.models.BasicModel;
-import cb.app.fyp.demo.adapters.DriveActivityExample;
+import cb.app.fyp.utility.Application;
+import cb.app.fyp.utility.ApplicationManager;
+import cb.app.fyp.utility.Directory;
 
 /**
  * Created by Conor on 25/02/14.
@@ -62,21 +66,19 @@ public class SendToFragment extends ListFragment {
 
 	private List<BasicModel> getModel() {
 		List<BasicModel> list = new ArrayList<BasicModel>();
-		list.add(get("Linux"));
-		list.add(get("Windows7"));
-		list.add(get("Suse"));
-		list.add(get("Eclipse"));
-		list.add(get("Ubuntu"));
-		list.add(get("Solaris"));
-		list.add(get("Android"));
-		list.add(get("iPhone"));
-		// Initially select one of the items
-		//list.get(4).setSelected(true);
+		ApplicationManager manager = new ApplicationManager(getActivity());
+		List<Application> applications = manager.getAppList();
+
+		for (Application app : applications){
+			list.add(get(app.getAppName(), app.getAppIcon()));
+		}
+
 		return list;
 	}
 
-	private BasicModel get(String s) {
-		return new BasicModel(s);
+
+	private BasicModel get(String s, Drawable icon) {
+		return new BasicModel(s, icon);
 	}
 
 }

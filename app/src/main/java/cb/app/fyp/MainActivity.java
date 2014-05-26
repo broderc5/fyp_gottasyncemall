@@ -29,7 +29,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cb.app.fyp.Drive.DriveActivity;
@@ -51,7 +50,7 @@ public class MainActivity extends Activity {
 	private DrawerLayout drawerLayout;
 	private ListView drawerListView;
 	private final String DATA = "data";
-
+	private static final String PATH = "path";
 	private String[] drawerItemTitles;
 	Fragment [] fragments = new Fragment[10];
 	byte[] file;
@@ -84,9 +83,10 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void setResult(List<byte[]> bytes){
+	public void setResult(List<String> paths, List<byte[]> bytes){
 		Intent intent = new Intent(this, DriveActivity.class);
 		for (int i = 0; i < bytes.size(); i++) {
+			intent.putExtra(PATH+i, paths.get(i));
 			intent.putExtra(DATA+i, bytes.get(i));
 		}
 		setResult(Activity.RESULT_OK, intent);

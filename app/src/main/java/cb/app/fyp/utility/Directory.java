@@ -1,5 +1,8 @@
-package cb.app.fyp;
+package cb.app.fyp.utility;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.nfc.Tag;
 import android.os.Environment;
 import android.util.Log;
 
@@ -23,15 +26,23 @@ public class Directory
 {
 	private final String TAG = "Directory";
 	private final String SDCARD = Environment.getExternalStorageDirectory().getPath();
-	private final String STORAGE_LOCATION = "/Android/data/cb.app.fyp/compressed/";
-	private final String LOCAL_STORAGE =  "/Download/src";
-	private List<String> fileList;
-	private String zipFileName;
+	private final String COMPRESSED_STORAGE = "/Android/data/cb.app.fyp/compressed/";
+	private final String TMP_STORAGE =  "/Android/data/cb.app.fyp/tmp/";
 
+	private String path;
+	private String zipFileName;
+	private List<String> fileList;
 
 	public Directory(String path) {
+		if (isDirectory(path)) {
+			this.path = path;
+		}
 		fileList = new ArrayList<String>();
 		zipFileName = path.substring(path.lastIndexOf('/')+1, path.length()) + ".zip";
+	}
+
+	public boolean isDirectory(String path){
+		return new File(path).isDirectory();
 	}
 
 	private void checkDirExists(String rootDir, String path){
@@ -49,27 +60,26 @@ public class Directory
 		}
 	}
 
-	public void zipFile(String outputPath){
+	public void zipFile(){
 
 		byte[] buffer = new byte[1024];
 
 		try{
-			checkDirExists(SDCARD, STORAGE_LOCATION);
-			generateFileList(new File(SDCARD + File.separator + LOCAL_STORAGE));
-			FileOutputStream fos = new FileOutputStream(outputPath);
+			checkDirExists(SDCARD, COMPRESSED_STORAGE);
+			generateFileList(new File(SDCARD + File.separator + TMP_STORAGE));
+			setZipFileName(path);
+			FileOutputStream fos = new FileOutputStream(SDCARD + COMPRESSED_STORAGE + getZipFileName());
 			ZipOutputStream zos = new ZipOutputStream(fos);
-			setZipFileName(LOCAL_STORAGE);
 
-			Log.i(TAG, "Output to Zip : " + outputPath);
+			Log.i(TAG, "Outputting to Zip : " + getZipFileName().substring(0, getZipFileName().lastIndexOf(".")));
 
 			for(String file : this.fileList){
 
-				System.out.println("File Added : " + file);
+				Log.i(TAG, "File Added : " + file);
 				ZipEntry ze= new ZipEntry(file);
 				zos.putNextEntry(ze);
-
-				FileInputStream in =
-						new FileInputStream(SDCARD + File.separator + LOCAL_STORAGE + "/" + file);
+				String path2 = SDCARD + TMP_STORAGE +file;
+				FileInputStream in = new FileInputStream(path2);
 
 				int len;
 				while ((len = in.read(buffer)) > 0) {
@@ -80,10 +90,10 @@ public class Directory
 			}
 
 			zos.closeEntry();
-			//remember close it
+//remember close it
 			zos.close();
 
-			System.out.println("Done");
+			Log.i(TAG, "Done");
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}
@@ -97,9 +107,9 @@ public class Directory
 		this.zipFileName = path.substring(path.lastIndexOf('/')+1, path.length()) + ".zip";
 	}
 
-	public byte[] getZippedFile(String path){
-		zipFile(path);
-		File file = new File(SDCARD + STORAGE_LOCATION + getZipFileName());
+	public byte[] getZippedFile(){
+		zipFile();
+		File file = new File(SDCARD + COMPRESSED_STORAGE + getZipFileName());
 		int size = (int) file.length();
 		byte[] bytes = new byte[size];
 		try {
@@ -107,10 +117,10 @@ public class Directory
 			buf.read(bytes, 0, bytes.length);
 			buf.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -124,7 +134,7 @@ public class Directory
 	 */
 	public void generateFileList(File node){
 
-		//add file only
+//add file only
 		if(node.isFile()){
 			fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
 		}
@@ -144,9 +154,12 @@ public class Directory
 	 * @return Formatted file path
 	 */
 	private String generateZipEntry(String file){
-		String sourceFolder = SDCARD + "/Download/src";
-		return file.substring(sourceFolder.length()+1, file.length());
+		String sourceFolder = SDCARD + TMP_STORAGE;
+		return file.substring(sourceFolder.length(), file.length());
 	}
 
 
+	public String getPath() {
+		return path;
+	}
 }

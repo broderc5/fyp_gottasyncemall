@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,11 +18,11 @@ import com.google.android.gms.drive.MetadataChangeSet;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
-import cb.app.fyp.Directory;
+import cb.app.fyp.utility.Directory;
 import cb.app.fyp.MainActivity;
+import cb.app.fyp.utility.RootManager;
 
 /**
  * Created by Conor on 20/03/14.
@@ -32,15 +30,13 @@ import cb.app.fyp.MainActivity;
 public class DriveActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
 		GoogleApiClient.OnConnectionFailedListener {
 
-	private volatile DriveActivity instance = null;
 	private static final String TAG = "Drive_Activity";
 
 	private static final int REQUEST_CODE_LAUNCH_MAIN = 1;
 	private static final int REQUEST_CODE_CREATOR = 2;
 	private static final int REQUEST_CODE_RESOLUTION = 3;
 
-	private final String SDCARD = Environment.getExternalStorageDirectory().getPath();
-	private final String LOCAL_STORAGE =  "/Download/src";
+	private final String LOCAL_STORAGE =  "/data/data/";
 
 	private static GoogleApiClient googleApiClient;
 	//TODO Check data type
@@ -50,6 +46,7 @@ public class DriveActivity extends Activity implements GoogleApiClient.Connectio
 	@Override
 	protected void onResume() {
 		super.onResume();
+		//startService(new Intent(this, DownloadFromDriveService.class));
 		if (googleApiClient == null) {
 			// Create the API client and bind it to an instance variable.
 			// We use this instance as the callback for connection and connection
@@ -61,10 +58,10 @@ public class DriveActivity extends Activity implements GoogleApiClient.Connectio
 					.addConnectionCallbacks(this)
 					.addOnConnectionFailedListener(this)
 					.build();
-			directory = new Directory(SDCARD + LOCAL_STORAGE);
 		}
 		// Connect the client. Once connected, the app's UI is launched.
 		googleApiClient.connect();
+		RootManager.requestRoot(this);
 	}
 
 	public static GoogleApiClient getGoogleApiClient(){
@@ -93,13 +90,13 @@ public class DriveActivity extends Activity implements GoogleApiClient.Connectio
 				} catch (IOException e1) {
 					Log.i(TAG, "Unable to write file contents.");
 				}
+
 				// Create the initial metadata - MIME type and title.
 				// Note that the user will be able to change the title later.
 				MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
 						.setMimeType("application/zip")
 						.setTitle(directory.getZipFileName())
 						.build();
-
 
 				// Create an intent for the file chooser, and start it.
 				IntentSender intentSender = Drive.DriveApi
@@ -115,9 +112,6 @@ public class DriveActivity extends Activity implements GoogleApiClient.Connectio
 				}
 			}
 		});
-
-
-
 	}
 
 	@Override
@@ -134,6 +128,7 @@ public class DriveActivity extends Activity implements GoogleApiClient.Connectio
 						while (it.hasNext()) {
 							String key = it.next();
 							file = (byte[]) data.getExtras().get(key);
+							directory = new Directory(data.getExtras().getString(it.next()));
 							Log.i(TAG, key + " extracted");
 							uploadFileToDrive();
 							Log.i(TAG, key + " uploaded");

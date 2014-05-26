@@ -61,7 +61,7 @@ public class ArrayAdapterNoCheck extends ArrayAdapter<BasicModel> {
 
 		}
 		ViewHolder holder = (ViewHolder) view.getTag();
-		holder.image.setImageResource(list.get(position).getIcon());
+		holder.image.setImageDrawable(list.get(position).getIcon());
 		holder.text.setText(list.get(position).getName());
 		return view;
 	}

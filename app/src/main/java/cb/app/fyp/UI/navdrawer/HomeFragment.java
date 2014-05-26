@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import cb.app.fyp.R;
 import cb.app.fyp.UI.adapters.AppSectionsPagerAdapter;
 
+
 public class HomeFragment extends Fragment implements ActionBar.TabListener {
 
 	/**
