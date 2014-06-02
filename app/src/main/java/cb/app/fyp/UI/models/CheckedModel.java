@@ -8,10 +8,11 @@ import android.graphics.drawable.Drawable;
 public class CheckedModel extends BasicModel {
 
 	private boolean selected;
+	private boolean checked;
 
 	public CheckedModel(String name, Drawable icon) {
 		super(name, icon);
-		selected = false;
+		checked = false;
 	}
 
 	public boolean isSelected() {
@@ -20,5 +21,13 @@ public class CheckedModel extends BasicModel {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
 	}
 }

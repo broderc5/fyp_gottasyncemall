@@ -20,7 +20,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -28,23 +30,27 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import cb.app.fyp.Drive.DriveActivity;
+import cb.app.fyp.UI.adapters.ArrayAdapterWithCheck;
+import cb.app.fyp.UI.models.CheckedModel;
 import cb.app.fyp.UI.navdrawer.AboutFragment;
 import cb.app.fyp.UI.navdrawer.HomeFragment;
 import cb.app.fyp.UI.navdrawer.PlanetFragment;
 import cb.app.fyp.UI.tabs.NullFragment;
+import cb.app.fyp.utility.Application;
+import cb.app.fyp.utility.ApplicationManager;
+import cb.app.fyp.utility.Directory;
+import cb.app.fyp.utility.DirectoryManager;
+import cb.app.fyp.utility.RootManager;
 
 public class MainActivity extends Activity {
-
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
-	 * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
-	 * derivative, which will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
 
 	//TODO Remove
 	private DrawerLayout drawerLayout;
@@ -55,10 +61,8 @@ public class MainActivity extends Activity {
 	Fragment [] fragments = new Fragment[10];
 	byte[] file;
 
-	/**
-	 * The {@link android.support.v4.view.ViewPager} that will display the three primary sections of the app, one at a
-	 * time.
-	 */
+	private ArrayAdapterWithCheck adapter;
+
 
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,12 +87,35 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void setResult(List<String> paths, List<byte[]> bytes){
-		Intent intent = new Intent(this, DriveActivity.class);
-		for (int i = 0; i < bytes.size(); i++) {
-			intent.putExtra(PATH+i, paths.get(i));
-			intent.putExtra(DATA+i, bytes.get(i));
+	private List<CheckedModel> getModel() {
+		List<CheckedModel> list = new ArrayList<CheckedModel>();
+		ApplicationManager manager = new ApplicationManager(this);
+		List<Application> applications = manager.getAppList();
+
+		for (Application app : applications){
+			list.add(get(app.getAppName(), app.getAppIcon()));
 		}
+
+		return list;
+	}
+
+	private CheckedModel get(String s, Drawable icon) {
+		return new CheckedModel(s, icon);
+	}
+
+	public void setResult(List<String> paths){
+		Intent intent = new Intent(this, DriveActivity.class);
+		for (int i = 0; i < paths.size(); i++) {
+			intent.putExtra(PATH+i, paths.get(i));
+		}
+		setResult(Activity.RESULT_OK, intent);
+		finish();
+	}
+
+	public void setResult(String paths){
+		Intent intent = new Intent(this, DriveActivity.class);
+		intent.putExtra(PATH, paths);
+
 		setResult(Activity.RESULT_OK, intent);
 		finish();
 	}

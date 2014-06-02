@@ -1,8 +1,5 @@
 package cb.app.fyp.utility;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.nfc.Tag;
 import android.os.Environment;
 import android.util.Log;
 
@@ -15,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -39,6 +37,8 @@ public class Directory
 		}
 		fileList = new ArrayList<String>();
 		zipFileName = path.substring(path.lastIndexOf('/')+1, path.length()) + ".zip";
+		checkDirExists(SDCARD, TMP_STORAGE + path.substring(path.lastIndexOf(File.separator)+1));
+
 	}
 
 	public boolean isDirectory(String path){
@@ -52,7 +52,7 @@ public class Directory
 			File file = new File(rootDir);
 			if (!file.exists()) {
 				if (file.mkdir()) {
-					Log.i(TAG, "Successfully created " + rootDir);
+					return;
 				} else {
 					Log.i(TAG, "Failed to create " + rootDir);
 				}
@@ -66,7 +66,7 @@ public class Directory
 
 		try{
 			checkDirExists(SDCARD, COMPRESSED_STORAGE);
-			generateFileList(new File(SDCARD + File.separator + TMP_STORAGE));
+			generateFileList(new File(SDCARD + File.separator + TMP_STORAGE + path.substring(path.lastIndexOf(File.separator)+1)));
 			setZipFileName(path);
 			FileOutputStream fos = new FileOutputStream(SDCARD + COMPRESSED_STORAGE + getZipFileName());
 			ZipOutputStream zos = new ZipOutputStream(fos);
@@ -75,7 +75,6 @@ public class Directory
 
 			for(String file : this.fileList){
 
-				Log.i(TAG, "File Added : " + file);
 				ZipEntry ze= new ZipEntry(file);
 				zos.putNextEntry(ze);
 				String path2 = SDCARD + TMP_STORAGE +file;
@@ -117,11 +116,11 @@ public class Directory
 			buf.read(bytes, 0, bytes.length);
 			buf.close();
 		} catch (FileNotFoundException e) {
-// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, e.toString());
 		} catch (IOException e) {
-// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, e.toString());
+		} catch (OutOfMemoryError e) {
+			Log.e(TAG, e.toString());
 		}
 
 		return bytes;

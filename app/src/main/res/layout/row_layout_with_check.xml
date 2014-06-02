@@ -19,8 +19,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@+id/label"
-        android:layout_toRightOf="@+id/icon">
+        android:layout_toRightOf="@+id/icon"
+        android:textSize="15sp">
     </TextView>
+
+    <RadioButton
+        android:id="@+id/radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="38dp" >
+    </RadioButton>
 
     <CheckBox
         android:id="@+id/check"
