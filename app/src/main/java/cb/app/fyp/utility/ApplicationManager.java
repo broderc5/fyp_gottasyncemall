@@ -17,20 +17,16 @@ import java.util.List;
 public class ApplicationManager {
 	private static final String TAG = "Application_Manager" ;
 	List<Application> appList;
-	Applications apps;
 	PackageManager packageManager;
 
 	public ApplicationManager(Context context) {
 		appList = new ArrayList<Application>();
-		apps = new Applications();
 		packageManager = context.getPackageManager();
-
 	}
 
 	public List<Application> getAppList() {
-		List<ApplicationInfo> applications = packageManager.getInstalledApplications(0);
 		List<PackageInfo> packages = packageManager.getInstalledPackages(0);
-		List<PackageInfo> userInstalledApps = apps.setUserInstalledApps(packages);
+		List<PackageInfo> userInstalledApps = setUserInstalledApps(packages);
 
 		String appName;
 		Drawable appIcon;
@@ -50,11 +46,31 @@ public class ApplicationManager {
 		}
 
 		Collections.sort(appList);
-		apps.setApps(appList);
 		return appList;
 	}
 
-	public void setApp(List<Application> appList) {
+
+	public void setAppList(List<Application> appList) {
 		this.appList = appList;
+	}
+
+	/**
+	 * Takes a list of apps on a device and filters it down to only the user
+	 * installed apps.
+	 * @param packageList A List of packages
+	 * @return A list of user installed apps
+	 */
+	public List<PackageInfo> setUserInstalledApps(List<PackageInfo> packageList) {
+		List<PackageInfo> packages = new ArrayList<PackageInfo>();
+		for(PackageInfo packageName : packageList) {
+			if(!isSystemPackage(packageName)) {
+				packages.add(packageName);
+			}
+		}
+		return packages;
+	}
+
+	private boolean isSystemPackage(PackageInfo pkgInfo) {
+		return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
 	}
 }

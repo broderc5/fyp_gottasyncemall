@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -38,7 +37,6 @@ public class Directory
 		fileList = new ArrayList<String>();
 		zipFileName = path.substring(path.lastIndexOf('/')+1, path.length()) + ".zip";
 		checkDirExists(SDCARD, TMP_STORAGE + path.substring(path.lastIndexOf(File.separator)+1));
-
 	}
 
 	public boolean isDirectory(String path){
@@ -156,7 +154,6 @@ public class Directory
 		String sourceFolder = SDCARD + TMP_STORAGE;
 		return file.substring(sourceFolder.length(), file.length());
 	}
-
 
 	public String getPath() {
 		return path;

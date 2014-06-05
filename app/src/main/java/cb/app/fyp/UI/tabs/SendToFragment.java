@@ -8,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import cb.app.fyp.R;
@@ -21,7 +19,6 @@ import cb.app.fyp.UI.adapters.ArrayAdapterNoCheck;
 import cb.app.fyp.UI.models.BasicModel;
 import cb.app.fyp.utility.Application;
 import cb.app.fyp.utility.ApplicationManager;
-import cb.app.fyp.utility.Directory;
 
 /**
  * Created by Conor on 25/02/14.
@@ -32,10 +29,6 @@ public class SendToFragment extends ListFragment {
 	{
 		View rootView = inflater.inflate(R.layout.fragment_sync_home, container, false);
 		ListView listView = (ListView) rootView.findViewById(android.R.id.list);
-		// create an array of Strings, that will be put to our ListActivit
-		//View footer = getLayoutInflater(icicle).inflate(R.layout.fragment_sync_home, null);
-		//ListView listView = getListView();
-		//listView.addFooterView(footer);
 		LayoutInflater inflator = getActivity().getLayoutInflater();
 		View view = inflator.inflate(R.layout.fragment_send_to, null);
 		ArrayAdapter<BasicModel> adapter = new ArrayAdapterNoCheck(getActivity(), getModel());
@@ -50,18 +43,7 @@ public class SendToFragment extends ListFragment {
 			}
 		});
 
-		Button button = (Button) rootView.findViewById(R.id.send_Button);
-/*
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-
-			}
-		});
-*/
-
-
-			return rootView;
+		return rootView;
 	}
 
 	private List<BasicModel> getModel() {

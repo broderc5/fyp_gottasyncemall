@@ -16,14 +16,13 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import cb.app.fyp.R;
 import cb.app.fyp.UI.models.CheckedModel;
 
-import static android.content.SharedPreferences.*;
+import static android.content.SharedPreferences.Editor;
 
 public class ArrayAdapterWithCheck extends ArrayAdapter<CheckedModel> {
 
@@ -102,8 +101,6 @@ public class ArrayAdapterWithCheck extends ArrayAdapter<CheckedModel> {
 
 				selectedPosition = position;
 				selectedRB = (RadioButton) view;
-
-				Toast.makeText(getContext(), position + "" + selectedRB.isSelected(), 0).show();
 			}
 		});
 
@@ -114,7 +111,6 @@ public class ArrayAdapterWithCheck extends ArrayAdapter<CheckedModel> {
 			viewHolder.radioButton.setChecked(true);
 			if(selectedRB != null && viewHolder.radioButton != selectedRB){
 				selectedRB = viewHolder.radioButton;
-				Toast.makeText(getContext(), position + " f " + selectedRB.isSelected(), 0).show();
 			}
 		}
 

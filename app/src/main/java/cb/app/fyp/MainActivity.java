@@ -20,9 +20,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -30,47 +28,27 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 
 import cb.app.fyp.Drive.DriveActivity;
-import cb.app.fyp.UI.adapters.ArrayAdapterWithCheck;
-import cb.app.fyp.UI.models.CheckedModel;
 import cb.app.fyp.UI.navdrawer.AboutFragment;
 import cb.app.fyp.UI.navdrawer.HomeFragment;
-import cb.app.fyp.UI.navdrawer.PlanetFragment;
+import cb.app.fyp.UI.navdrawer.MyAppsFragment;
+import cb.app.fyp.UI.navdrawer.SettingsFragment;
 import cb.app.fyp.UI.tabs.NullFragment;
-import cb.app.fyp.utility.Application;
-import cb.app.fyp.utility.ApplicationManager;
-import cb.app.fyp.utility.Directory;
-import cb.app.fyp.utility.DirectoryManager;
-import cb.app.fyp.utility.RootManager;
 
 public class MainActivity extends Activity {
 
-	//TODO Remove
+	private static final String TAG = "MainActivity";
+
 	private DrawerLayout drawerLayout;
 	private ListView drawerListView;
-	private final String DATA = "data";
 	private static final String PATH = "path";
 	private String[] drawerItemTitles;
-	Fragment [] fragments = new Fragment[10];
-	byte[] file;
-
-	private ArrayAdapterWithCheck adapter;
-
-
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//TODO clean up!!
-		//mTitle = mDrawerTitle = getTitle();
 		drawerItemTitles = getResources().getStringArray(R.array.nav_drawer_array);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerListView = (ListView) findViewById(R.id.left_drawer);
@@ -85,31 +63,6 @@ public class MainActivity extends Activity {
 		if (savedInstanceState == null) {
 			selectItem(0);
 		}
-	}
-
-	private List<CheckedModel> getModel() {
-		List<CheckedModel> list = new ArrayList<CheckedModel>();
-		ApplicationManager manager = new ApplicationManager(this);
-		List<Application> applications = manager.getAppList();
-
-		for (Application app : applications){
-			list.add(get(app.getAppName(), app.getAppIcon()));
-		}
-
-		return list;
-	}
-
-	private CheckedModel get(String s, Drawable icon) {
-		return new CheckedModel(s, icon);
-	}
-
-	public void setResult(List<String> paths){
-		Intent intent = new Intent(this, DriveActivity.class);
-		for (int i = 0; i < paths.size(); i++) {
-			intent.putExtra(PATH+i, paths.get(i));
-		}
-		setResult(Activity.RESULT_OK, intent);
-		finish();
 	}
 
 	public void setResult(String paths){
@@ -135,10 +88,13 @@ public class MainActivity extends Activity {
 				fragment = new HomeFragment();
 				break;
 			case 1:
-				//Placeholder
-				fragment = new PlanetFragment();
+				fragment = new MyAppsFragment();
 				break;
 			case 2:
+				//Placeholder
+				fragment = new SettingsFragment();
+				break;
+			case 3:
 				fragment = new AboutFragment();
 
 		}
@@ -153,7 +109,7 @@ public class MainActivity extends Activity {
 			drawerLayout.closeDrawer(drawerListView);
 		} else {
 			// error in creating fragment
-			Log.e("MainActivity", "Error in creating fragment");
+			Log.e(TAG, "Error in creating fragment");
 		}
 	}
 }

@@ -1,37 +1,27 @@
 package cb.app.fyp.utility;
 
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.nfc.Tag;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.security.acl.Permission;
 
 /**
  * Created by Conor on 19/05/2014.
  */
 public class RootManager {
 
-	private static final String SDCARD = Environment.getExternalStorageDirectory().getPath();
-	private static final String STORAGE_LOCATION = "/Android/data/cb.app.fyp/tmp/";
 	private static final String TAG = "ROOT_MANAGER";
 
+	private static boolean hasRoot;
 	private Context context;
-	private Process p;
-	private DataInputStream dataInputStream;
 
 	public RootManager(Context context) {
 		this.context = context;
-		//dataInputStream = new DataInputStream()
 	}
 
-	public static void requestRoot(Context context){
+	public static boolean requestRoot(Context context){
 		Process p;
 		try {
 			// Preform su to get root privledges
@@ -47,24 +37,23 @@ public class RootManager {
 			try {
 				p.waitFor();
 				if (p.exitValue() != 255) {
-					// TODO Code to run on success
-					toastMessage(context, "root");
+					hasRoot = true;
+					showMessage(context, "root");
 				}
 				else {
-					// TODO Code to run on unsuccessful
-					toastMessage(context, "not root");
+					hasRoot = false;
+					showMessage(context, "not root");
 				}
 			} catch (InterruptedException e) {
-				// TODO Code to run in interrupted exception
-				toastMessage(context, "not root");
+				showMessage(context, "not root");
 			}
 		} catch (IOException e) {
-			// TODO Code to run in input/output exception
-			toastMessage(context, "not root");
+			showMessage(context, "not root");
 		}
+		return hasRoot;
 	}
 
-	private static void toastMessage(Context context, String message){
+	private static void showMessage(Context context, String message){
 		Toast.makeText(context, message, 0);
 	}
 
@@ -97,9 +86,5 @@ public class RootManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public DataInputStream getDataInputStream() {
-		return dataInputStream;
 	}
 }
